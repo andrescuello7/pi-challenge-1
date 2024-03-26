@@ -30,7 +30,7 @@ uvicorn app:app --port 8000 --host 127.0.0.1 --reload
 Added Swagger for default in FastAPI 
 - Redirect for swagger in root route
 
-![Preview Image](https://github.com/andrescuello7/pi-fastapi-apirest/assets/72234490/94a67f2a-c499-4865-a56e-245af8134ad6)
+![Preview Image](https://github-production-user-asset-6210df.s3.amazonaws.com/72234490/316928688-19fda59b-97b8-4776-bd36-57a48dffb6de.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20240326%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240326T152822Z&X-Amz-Expires=300&X-Amz-Signature=2dd12136b1d73543f75c71975e14bef119d380f56c8ccb628aff4e38bd5b2e0f&X-Amz-SignedHeaders=host&actor_id=72234490&key_id=0&repo_id=777829394)
 
 ##
 
