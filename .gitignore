@@ -1,0 +1,8 @@
+__pycache__/
+src/schemas/__pycache__/
+src/models/__pycache__/
+src/routes/__pycache__/
+
+.env
+.venv/
+.vscode
