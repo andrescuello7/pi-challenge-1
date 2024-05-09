@@ -4,7 +4,6 @@ import urllib
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from decouple import config
 
 # Connection with database
 DB_SERVER = os.getenv('DB_SERVER') or 'server-acuello.database.windows.net'

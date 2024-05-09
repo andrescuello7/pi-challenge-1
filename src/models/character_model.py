@@ -16,5 +16,3 @@ class CharacterModel(Base):
 
     eye_color_id = Column(Integer, ForeignKey('eye_color.id'), nullable=False)
     eye_color = relationship("EyeColorModel")
-    # eye_color = relationship("eye_color", foreign_keys="characters.eye_color_id")
-
