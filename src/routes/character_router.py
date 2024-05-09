@@ -1,29 +1,20 @@
 from typing import List
-from fastapi import APIRouter
 from fastapi.params import Depends, Depends
-from starlette.responses import RedirectResponse
+from fastapi import APIRouter
 
-from src.services.database import Session, get_db
-from enums.routes_enum import RoutesEnum
-from enums.request_status_enum import HttpStatus
+from src.config.database import Session, get_db
+from enums.http_enum import HttpStatus
 
-from interfaces.i_request import RequestResponse
 from src.models.character_model import CharacterModel
 from src.models.eye_color_model import EyeColorModel
 from src.schemas.character_schema import CharacterSchema
-from src.schemas.eye_color_schema import EyeColorSchema
-from datetime import datetime, date
+
+from enums.routes_enum import RoutesEnum
+from interfaces.i_request import RequestResponse
 
 router = APIRouter()
 path = RoutesEnum()
 requestResponse = RequestResponse()
-
-
-# Route '/' redirect for swagger
-@router.get("/")
-def main():
-    return RedirectResponse(url="/docs/")
-
 
 # Get for all characters of DB
 @router.get(path.get_all_characters, response_model=List[CharacterSchema])

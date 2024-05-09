@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from src.services.database import Base
+from src.config.database import Base
 
 # EyeColorModel implementation
 class EyeColorModel(Base):

@@ -6,3 +6,5 @@ class RoutesEnum:
     get_character_by_id = '/api/character/get/identify/{id}'
     get_character_by_name = '/api/character/get/{name}'
     delete_character = '/api/character/delete/{id}'
+
+    gpt_quetions = '/api/gpt/question'

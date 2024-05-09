@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from src.services.database import Base
+from src.config.database import Base
 from datetime import datetime
 
 # CharacterModel implementation
