@@ -17,7 +17,7 @@ ConfigOpenAI.setApiCredentials()
 # Configuración de políticas CORS
 origins = [
     "http://127.0.0.1:5500",
-    "http://127.0.0.1:8000"
+    "https://pi-challenge-fr.vercel.app"
 ]
 
 # Include Routes for methods HTTP
@@ -38,6 +38,4 @@ app.add_middleware(
 )
 
 # Server running from FastAPI
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+Base.metadata.create_all(bind=engine)
