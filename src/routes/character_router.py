@@ -1,6 +1,6 @@
 from typing import List
-from fastapi.params import Depends, Depends
 from fastapi import APIRouter
+from fastapi.params import Depends, Depends
 
 from src.config.database import Session, get_db
 from enums.http_enum import HttpStatus
