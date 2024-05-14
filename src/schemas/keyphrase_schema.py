@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-# Schema for endpoints for characters methods http
+# Schema for Keyphrase with endpoint id body schema
 class KeyphraseSchema(BaseModel):
     id: int
     user_id: int

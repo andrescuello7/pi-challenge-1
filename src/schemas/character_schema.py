@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 from src.schemas.eye_color_schema import EyeColorSchema
 
-# Schema for endpoints for characters methods http
+# Schema for Character with endpoint id body schema
 class CharacterSchema(BaseModel):
     id: int
     name: str

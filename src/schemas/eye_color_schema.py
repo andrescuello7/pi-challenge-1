@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
 
+# Schema for EyeColor with endpoint id body schema
 class EyeColorSchema(BaseModel):
     id: int
     color: str

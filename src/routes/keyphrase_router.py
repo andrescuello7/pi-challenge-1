@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends, Depends
 from starlette.responses import RedirectResponse
 
-from enums.routes_enum import RoutesEnum
+from enums.routes_enum import ROUTES_ENUM
 from enums.http_enum import HttpStatus
 
 from src.models.keyphrase_model import KeyphraseModel
@@ -12,11 +12,9 @@ from src.schemas.keyphrase_schema import KeyphraseSchema
 from src.orc.orchestrator import get_answer
 from src.config.database import Session, get_db
 
-from interfaces.i_request import RequestResponse
+from interfaces.i_request import RESPONSE_HTTP
 
 router = APIRouter()
-path = RoutesEnum()
-requestResponse = RequestResponse()
 
 # Route '/' redirect for swagger
 @router.get("/")
@@ -24,7 +22,7 @@ def main():
     return RedirectResponse(url="/docs/")
 
 # GET keyphrase
-@router.get(path.get_gpt_keyphrase)
+@router.get(ROUTES_ENUM.GET_GPT_KEYPHRASE)
 def gpt_quetions(text: str):
     try:
         response = get_answer({"question": text})["answer"]
@@ -35,7 +33,7 @@ def gpt_quetions(text: str):
         return {"error": str(e)}
     
 # GET keyphrase byId
-@router.get(path.get_gpt_keyphrase_by_id)
+@router.get(ROUTES_ENUM.GET_GPT_KEYPHRASE_BY_ID)
 def gpt_quetions(user_id: int, db: Session = Depends(get_db)): # type: ignore
     _result = []
     try:
@@ -51,7 +49,7 @@ def gpt_quetions(user_id: int, db: Session = Depends(get_db)): # type: ignore
         return {"error": str(e)}
     
 # POST keyphrase
-@router.post(path.post_gpt_keyphrase)
+@router.post(ROUTES_ENUM.POST_GPT_KEYPHRASE)
 def gpt_quetions(req: KeyphraseSchema, db: Session = Depends(get_db)): # type: ignore
     try:
         if req.user_id:
@@ -77,4 +75,4 @@ def gpt_quetions(req: KeyphraseSchema, db: Session = Depends(get_db)): # type: i
                     }
                 }
     except Exception as e:
-        return requestResponse.error({"error": 'No se pudo realizar la identiciacion de la frases'}, HttpStatus.NOT_FOUND)
+        return RESPONSE_HTTP.error({"error": 'No se pudo realizar la identiciacion de la frases'}, HttpStatus.NOT_FOUND)

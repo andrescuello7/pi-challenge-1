@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-# Schema for endpoints for characters methods http
+# Schema for TaskS with endpoint id body schema
 class TaskSchema(BaseModel):
     id: int
     state: int

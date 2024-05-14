@@ -11,3 +11,5 @@ class RequestResponse:
             status_code, 
             detail=f"Error: {message}"
         )
+
+RESPONSE_HTTP = RequestResponse()

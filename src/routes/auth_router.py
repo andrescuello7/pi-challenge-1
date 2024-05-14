@@ -12,26 +12,23 @@ from enums.http_enum import HttpStatus
 from src.models.user_model import UserModel
 from src.schemas.auth_schema import AuthSchema
 
-from enums.routes_enum import RoutesEnum
-from interfaces.i_request import RequestResponse
+from enums.routes_enum import ROUTES_ENUM
+from interfaces.i_request import RESPONSE_HTTP
 from utils.auth import auth_token
 
 router = APIRouter()
-path = RoutesEnum()
-requestResponse = RequestResponse()
-AUTH = os.getenv('JWT_SECRET') or 'ADMIN'
 
 # Get for all eye_colors
-@router.get(path.get_auth)
+@router.get(ROUTES_ENUM.GET_AUTH)
 def get_auth(authorization: str = Header(...), db: Session = Depends(get_db)): # type: ignore
     try: 
         response = auth_token(authorization)
         return response
     except Exception as e:
-        return requestResponse.error(f"authorization, detail: {e}", HttpStatus.UNAUTHORIZED)
+        return RESPONSE_HTTP.error(f"authorization, detail: {e}", HttpStatus.UNAUTHORIZED)
 
 # Create Character with model of schema
-@router.post(path.post_auth)
+@router.post(ROUTES_ENUM.POST_AUTH)
 def create_auth(req: AuthSchema, db: Session = Depends(get_db)): # type: ignore
     try:
         user = db.query(UserModel).filter_by(user_name=req.user_name).first()
@@ -39,7 +36,7 @@ def create_auth(req: AuthSchema, db: Session = Depends(get_db)): # type: ignore
             if not bcrypt.checkpw(req.password.encode('utf-8'), user.password.encode('utf-8')):
                 raise HTTPException(HttpStatus.UNAUTHORIZED, detail="passwords do not match")
 
-            payload = {
+            token = encode({
                 'user': {
                     'id': user.id,
                     'role': user.role,
@@ -47,9 +44,7 @@ def create_auth(req: AuthSchema, db: Session = Depends(get_db)): # type: ignore
                     'user_name': user.user_name,
                     'photo': user.photo
                 }
-            }
-
-            token = encode(payload, AUTH, algorithm='HS256')
+            }, os.getenv('JWT_SECRET') or 'ADMIN', algorithm='HS256')
         return {'x-auth-token': token}
     except Exception as e:
-        return requestResponse.error(e, HttpStatus.UNAUTHORIZED)
+        return RESPONSE_HTTP.error(e, HttpStatus.UNAUTHORIZED)
