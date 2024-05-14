@@ -23,5 +23,6 @@ class RoutesEnum:
     get_tasks = '/api/tasks/getAll'
     get_task_by_id = '/api/find/tasks'
     post_tasks = '/api/create/task'
-    put_tasks = '/api/update/task'
+    put_tasks = '/api/update/task/{task_id}'
     patch_tasks = '/api/move/task'
+    delete_tasks = '/api/delete/task/{task_id}'

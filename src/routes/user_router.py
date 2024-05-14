@@ -63,7 +63,7 @@ def update_task(req: UserSchema, user_id: int, authorization: str = Header(...),
             user.photo = req.photo
             user.user_name = req.user_name
             user.full_name = req.full_name
-            user.password = req.password
+            user.password = hash_password(req.password)
             user.role = req.role
 
 
