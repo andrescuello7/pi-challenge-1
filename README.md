@@ -3,7 +3,7 @@
 Challenge of API with framework FastAPI -> Python!
 - URL [```Pi/Fastapi```](https://pi-challenge-fr.vercel.app)
 
-![Preview Image](https://res-console.cloudinary.com/five-drive/thumbnails/v1/image/upload/v1715704681/TWljcm9zb2Z0VGVhbXMtaW1hZ2VfN193Z3FjYno=/drilldown)
+![Preview Image](https://github.com/andrescuello7/pi-challenge-1/assets/72234490/14dcf285-def5-4369-8c67-94d8ea0661d9)
 
 ##
 #### Development:
@@ -24,7 +24,7 @@ gunicorn app:app -w 4 -k uvicorn.workers.UvicornWorker
 Added Swagger for default in FastAPI 
 - Redirect for swagger in root route
 
-![Preview Image](https://res-console.cloudinary.com/five-drive/thumbnails/v1/image/upload/v1715704681/TWljcm9zb2Z0VGVhbXMtaW1hZ2VfOF95MmVsejI=/drilldown)
+![Preview Image](https://github.com/andrescuello7/pi-challenge-1/assets/72234490/3e29abdc-6c96-4498-9560-8ca5bedfd905)
 
 ##
 
