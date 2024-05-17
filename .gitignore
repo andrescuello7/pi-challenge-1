@@ -1,8 +1,8 @@
 __pycache__/
-src/schemas/__pycache__/
-src/models/__pycache__/
-src/routes/__pycache__/
+schemas/__pycache__/
+models/__pycache__/
+routes/__pycache__/
 
+venv/
 .env
-.venv/
 .vscode
