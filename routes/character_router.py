@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter
-from fastapi.params import Depends, Depends
-
+from fastapi.params import Depends
 from models.eye_color_model import EyeColorModel
 from models.character_model import CharacterModel
 from schemas.character_schema import character_schema
