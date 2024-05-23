@@ -34,8 +34,10 @@ def create_user(
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Not authorized'
+            )
 
         response = controller.create_new_user(db, req)
         return response
@@ -53,8 +55,10 @@ def update_task(
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Not authorized'
+            )
 
         response = controller.update_user(db, user_id, req)
         return response
@@ -71,8 +75,10 @@ def delete_character(
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Not authorized'
+            )
 
         user = controller.delete_user(db, user_id)
         return {"message": "User deleted successfully", "user": user}

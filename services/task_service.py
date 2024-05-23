@@ -3,6 +3,7 @@ from models.task_model import TaskModel
 from models.user_model import UserModel
 from datetime import datetime
 
+
 def get_all_tasks(db):
     '''
     Query of database in the table TasksModel to get all
@@ -17,8 +18,11 @@ def get_all_tasks(db):
 
         return _list
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-            detail="find all tasks in database")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="find all tasks in database"
+        )
+
 
 def get_tasks_by_id(db, user_id):
     '''
@@ -28,8 +32,11 @@ def get_tasks_by_id(db, user_id):
         response = db.query(TaskModel).filter_by(user_id=user_id).all()
         return response
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-            detail="find all tasks in database")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="find all tasks in database"
+        )
+
 
 def create_new_task(db, req, _id):
     '''
@@ -48,8 +55,10 @@ def create_new_task(db, req, _id):
 
         return model
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-            detail="database or model task null")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="database or model task null"
+        )
 
 
 def update_task(db, task_id, req):
@@ -70,8 +79,10 @@ def update_task(db, task_id, req):
         db.refresh(model)
         return model
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-            detail="udpate task, in get datos for update")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="update task, in get datos for update"
+        )
 
 
 def patch_task(db, task_id, state):
@@ -92,8 +103,11 @@ def patch_task(db, task_id, state):
 
         return model
     else:
-        raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
-            detail="task_id null or error in udpate task")
+        raise HTTPException(
+            status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
+            detail="task_id null or error in udpate task"
+        )
+
 
 def delete_tasks(db, task_id):
     '''
@@ -106,5 +120,7 @@ def delete_tasks(db, task_id):
         db.commit()
         return task
     else:
-        raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
-            detail="task_id is null")
+        raise HTTPException(
+            status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
+            detail="task_id is null"
+        )
