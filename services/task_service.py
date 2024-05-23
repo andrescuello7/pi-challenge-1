@@ -1,20 +1,49 @@
 from fastapi import HTTPException, status
 from models.task_model import TaskModel
 from models.user_model import UserModel
+from models.comment_model import CommentModel
+from schemas.task_schema import task_schema, User, Comment
 from datetime import datetime
+from typing import List
 
 
-def get_all_tasks(db):
-    '''
-    Query of database in the table TasksModel to get all
-    '''
+def get_all_tasks(db) -> List[task_schema]:
+    """
+    Query of database in the table TasksModel to get all tasks.
+    """
     _list = []
     response = db.query(TaskModel).all()
     if db and response:
         for task in response:
             user = db.query(UserModel).filter_by(id=task.user_id).first()
             if user:
-                _list.append({'user': user, 'task': task})
+                user_schema = User(
+                    id=user.id,
+                    photo=user.photo,
+                    user_name=user.user_name,
+                    full_name=user.full_name,
+                    password=user.password,
+                    role=user.role,
+                )
+
+                comments = db.query(CommentModel).filter_by(
+                    task_id=task.id).all()
+                comment_schemas = [Comment(
+                    id=comment.id,
+                    task_id=comment.task_id,
+                    comment=comment.comment,
+                ) for comment in comments]
+
+                schema = task_schema(
+                    id=task.id,
+                    state=task.state,
+                    title=task.title,
+                    description=task.description,
+                    user_id=task.user_id,
+                    user=user_schema,
+                    comments=comment_schemas,
+                )
+                _list.append(schema)
 
         return _list
     else:
@@ -123,4 +152,26 @@ def delete_tasks(db, task_id):
         raise HTTPException(
             status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
             detail="task_id is null"
+        )
+
+
+def add_comment_task(db, req):
+    '''
+    Query for DELETE a task in the table TasksModel in the database
+    Identify for task_id
+    '''
+    if req and db:
+        model = CommentModel(
+            task_id=req.task_id,
+            comment=req.comment,
+        )
+        db.add(model)
+        db.commit()
+        db.refresh(model)
+
+        return model
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
+            detail="error creting comment"
         )

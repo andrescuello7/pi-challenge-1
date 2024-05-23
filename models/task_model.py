@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Text
 from db_config import Base
 from datetime import datetime
 
-# TaskModel implementation
+
 class TaskModel(Base):
     __tablename__ = "tasks"
     id = Column(Integer, primary_key=True, index=True)
@@ -11,4 +11,5 @@ class TaskModel(Base):
     description = Column(Text)
     state = Column(Integer, nullable=False, default=0)
     update_at = Column(DateTime, default=None, nullable=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(), nullable=True)
+    created_at = Column(
+        DateTime, default=lambda: datetime.now(), nullable=True)

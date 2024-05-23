@@ -22,7 +22,10 @@ def get_users(db: session = Depends(get_db)):
         response = controller.get_all(db)
         return response
     except Exception as e:
-        return {'error': f"get all users, detail: {e}"}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: get all users, detail: {e}",
+        )
 
 @router.post('/api/create/user')
 def create_user(
@@ -36,13 +39,16 @@ def create_user(
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized'
+                detail='Error: Not authorized'
             )
 
         response = controller.create_new_user(db, req)
         return response
     except Exception as e:
-        return {'error': f"create user, detail: {e}"}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: create user, detail: {e}",
+        )
 
 @router.put('/api/update/user/{user_id}')
 def update_task(
@@ -63,7 +69,10 @@ def update_task(
         response = controller.update_user(db, user_id, req)
         return response
     except Exception as e:
-        return {'error': f"update user, {str(e)}"}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: update user, detail: {e}",
+        )
 
 @router.delete('/api/delete/user/{user_id}')
 def delete_character(
@@ -83,4 +92,7 @@ def delete_character(
         user = controller.delete_user(db, user_id)
         return {"message": "User deleted successfully", "user": user}
     except Exception as e:
-        return {'error': f"delete user, {str(e)}"}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: delete user, detail: {e}",
+        )
