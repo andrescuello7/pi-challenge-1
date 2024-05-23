@@ -62,7 +62,9 @@ SQLAlchemy==2.0.22
 starlette==0.27.0
 tomli==2.0.1
 tqdm==4.66.4
+typing==3.7.4.3
 typing_extensions==4.8.0
 urllib3==2.2.1
+uvicorn==0.23.2
 wsproto==1.2.0
 yarl==1.9.4

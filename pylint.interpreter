@@ -1,0 +1,8 @@
+{
+  "python.pythonPath": "C:/ruta/a/tu/python.exe",
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "pylint.interpreter": [
+    "C:/ruta/a/tu/python.exe"
+  ]
+}
