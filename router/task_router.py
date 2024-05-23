@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from fastapi.params import Depends, Depends
 from datetime import datetime
-from db_config import Session, get_db
-from enums.user_enum import UserRole
+from db_config import session, get_db
+from enums.user_enum import user_role
 from models.user_model import UserModel
 from models.task_model import TaskModel
-from schemas.task_schema import TaskSchema
+from schemas.task_schema import task_schema
 from utils.auth import auth_token
 
 router = APIRouter()
 
 @router.get('/api/tasks/getAll')
-def get_users(db: Session = Depends(get_db)): # type: ignore
-    try: 
+def get_users(db: session = Depends(get_db)):
+    try:
         _list = []
         response = db.query(TaskModel).all()
         for task in response:
@@ -25,15 +25,15 @@ def get_users(db: Session = Depends(get_db)): # type: ignore
         return {'error': f"get all tasks, detail: {e}"}
 
 @router.get('/api/find/tasks')
-def get_users(user_id: int, db: Session = Depends(get_db)): # type: ignore
+def get_users(user_id: int, db: session = Depends(get_db)):
     try: 
         response = db.query(TaskModel).filter_by(user_id=user_id).all()
         return response
     except Exception as e:
         return {'error': f"find tasks: {e}"}
-    
+
 @router.post('/api/create/task')
-def create_user(req: TaskSchema, authorization: str = Header(...), db: Session = Depends(get_db)): # type: ignore
+def create_user(req: task_schema, authorization: str = Header(...), db: session = Depends(get_db)):
     try:
         user_auth = auth_token(authorization)
         if user_auth:
@@ -46,18 +46,18 @@ def create_user(req: TaskSchema, authorization: str = Header(...), db: Session =
             db.add(model)
             db.commit()
             db.refresh(model)
-        
+
         return model
     except Exception as e:
         return {'error': f"create user, detail: {e}"}
 
 @router.put('/api/update/task/{task_id}')
-def update_task(task_id: int, req: TaskSchema, authorization: str = Header(...), db: Session = Depends(get_db)): # type: ignore
+def update_task(task_id: int, req: task_schema, authorization: str = Header(...), db: session = Depends(get_db)):
     try:
         user_auth = auth_token(authorization)
-        if user_auth['role'] != UserRole().ADMIN:
+        if user_auth['role'] != user_role().ADMIN:
             raise HTTPException(400, detail='Not authorized')
-        
+
         model = db.query(TaskModel).filter_by(id=task_id).first()
         if model:
             model.state = req.state
@@ -69,7 +69,7 @@ def update_task(task_id: int, req: TaskSchema, authorization: str = Header(...),
             db.add(model)
             db.commit()
             db.refresh(model)
-    
+
         return model
     except Exception as e:
         return {'error': f"update user, detail: {e}"}
@@ -79,12 +79,12 @@ def patch_task(
     task_id: int,
     state: int,
     authorization: str = Header(...),
-    db: Session = Depends(get_db)): # type: ignore
+    db: session = Depends(get_db)):
     try:
         user_auth = auth_token(authorization)
-        if user_auth['role'] != UserRole().ADMIN:
+        if user_auth['role'] != user_role().ADMIN:
             raise HTTPException(400, detail='Not authorized')
-            
+
         model = db.query(TaskModel).filter_by(id=task_id).first()
         model.state = state
         model.update_at = datetime.now()
@@ -97,12 +97,12 @@ def patch_task(
         return {'error': f"update state task, detail: {e}"}
 
 @router.delete('/api/delete/task/{task_id}')
-def delete_tasks(task_id: int, authorization: str = Header(...), db: Session = Depends(get_db)): # type: ignore
+def delete_tasks(task_id: int, authorization: str = Header(...), db: session = Depends(get_db)):
     try:
         user_auth = auth_token(authorization)
-        if user_auth['role'] != UserRole().ADMIN:
+        if user_auth['role'] != user_role().ADMIN:
             raise HTTPException(400, detail='Not authorized')
-        
+
         task = db.query(TaskModel).filter_by(id=task_id).first()
         if task:
             db.delete(task)

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class TaskSchema(BaseModel):
+class task_schema(BaseModel):
     id: int
     state: int
     title: str
