@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-from fastapi.params import Depends, Depends
+from fastapi import APIRouter, status, HTTPException
+from fastapi.params import Depends
 from models.keyphrase_model import KeyphraseModel
 from models.character_model import CharacterModel
 from schemas.keyphrase_schema import keyphrase_schema
@@ -7,6 +7,7 @@ from services.orchestrator import get_answer
 from db_config import session, get_db
 
 router = APIRouter()
+
 
 @router.get('/api/keyphrase/{text}')
 def gpt_quetions(text: str):
@@ -16,11 +17,14 @@ def gpt_quetions(text: str):
         response[0] = response[0].replace('- ', '')
         return {"response": response}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: gpt quetions: {str(e)}",
+        )
 
-# GET keyphrase byId
+
 @router.get('/api/keyphrase/character_id/{user_id}')
-def gpt_quetions(user_id: int, db: session = Depends(get_db)):
+def gpt_find_quetions(user_id: int, db: session = Depends(get_db)):
     _result = []
     try:
         _query = db.query(KeyphraseModel).filter_by(user_id=user_id).all()
@@ -32,14 +36,18 @@ def gpt_quetions(user_id: int, db: session = Depends(get_db)):
 
         return {"response": _result}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: find gpt quetions: {str(e)}",
+        )
 
-# POST keyphrase
+
 @router.post('/api/keyphrase')
-def gpt_quetions(req: keyphrase_schema, db: session = Depends(get_db)):
+def gpt_post_quetions(req: keyphrase_schema, db: session = Depends(get_db)):
     try:
         if req.user_id:
-            _user = db.query(CharacterModel).filter_by(id=req.user_id).first()
+            _user = db.query(CharacterModel).filter_by(
+                id=req.user_id).first()
 
             if _user:
                 result = get_answer({"question": req.keyphrase})["answer"]
@@ -54,11 +62,14 @@ def gpt_quetions(req: keyphrase_schema, db: session = Depends(get_db)):
                 _keyphrase[0] = _keyphrase[0].replace('- ', '')
 
                 return {
-                    "response": { 
+                    "response": {
                         "user": model.user_id,
                         "user_id": _user.name,
                         "keyphrase": _keyphrase
                     }
                 }
     except Exception as e:
-        return {"error": 'No se pudo realizar la identiciacion de la frases'}
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error: not identify in the frase: {str(e)}",
+        )

@@ -9,6 +9,7 @@ from db_config import session, get_db
 
 router = APIRouter()
 
+
 @router.get('/api/character/getAll', response_model=List[character_schema])
 def find_all_characters(db: session = Depends(get_db)):
     try:
@@ -16,7 +17,8 @@ def find_all_characters(db: session = Depends(get_db)):
         if characters:
             characters_with_eye_color = []
             for character in characters:
-                eye_color = db.query(EyeColorModel).filter_by(id=character.eye_color_id).first()
+                eye_color = db.query(EyeColorModel).filter_by(
+                    id=character.eye_color_id).first()
                 if eye_color:
                     character_with_eye_color = {
                         "id": character.id,
@@ -32,10 +34,12 @@ def find_all_characters(db: session = Depends(get_db)):
                             "color": eye_color.color
                         }
                     }
-                    characters_with_eye_color.append(character_with_eye_color)
+                    characters_with_eye_color.append(
+                        character_with_eye_color)
         return characters_with_eye_color
     except Exception as e:
         return {'error': f'in show character {str(e)}'}
+
 
 @router.get('/api/character/color/getAll')
 def find_all_colors(db: session = Depends(get_db)):
@@ -44,11 +48,13 @@ def find_all_colors(db: session = Depends(get_db)):
         return colors
     return {'error': 'in show characters'}
 
+
 @router.get('/api/character/get/{name}', response_model=character_schema)
 def find_character_by_name(name: str, db: session = Depends(get_db)):
     character = db.query(CharacterModel).filter_by(name=name).first()
     if character:
-        eye_color = db.query(EyeColorModel).filter_by(id=character.eye_color_id).first()
+        eye_color = db.query(EyeColorModel).filter_by(
+            id=character.eye_color_id).first()
         if eye_color:
             return {
                 "id": character.id,
@@ -66,11 +72,13 @@ def find_character_by_name(name: str, db: session = Depends(get_db)):
             }
     return {'error': 'get characters for name'}
 
+
 @router.get('/api/character/get/identify/{id}', response_model=character_schema)
 def find_character_by_id(id: int, db: session = Depends(get_db)):
     character = db.query(CharacterModel).filter_by(id=id).first()
     if character:
-        eye_color = db.query(EyeColorModel).filter_by(id=character.eye_color_id).first()
+        eye_color = db.query(EyeColorModel).filter_by(
+            id=character.eye_color_id).first()
         if eye_color:
             return {
                 "id": character.id,
@@ -87,6 +95,7 @@ def find_character_by_id(id: int, db: session = Depends(get_db)):
                 }
             }
     return {'error': 'get characters for ID'}
+
 
 @router.post('/api/character/add')
 def create_character(req: character_schema, db: session = Depends(get_db)):
@@ -108,12 +117,14 @@ def create_character(req: character_schema, db: session = Depends(get_db)):
         return response
     return {'error': 'get characters for ID'}
 
+
 @router.delete('/api/character/delete/{id}')
 def delete_character(id: int, db: session = Depends(get_db)):
     character = db.query(CharacterModel).filter_by(id=id).first()
     if not character:
         return {"error": "in remove Character!"}
-    eye_color = db.query(EyeColorModel).filter_by(id=character.eye_color_id).first()
+    eye_color = db.query(EyeColorModel).filter_by(
+        id=character.eye_color_id).first()
     if eye_color:
         db.delete(character)
         db.delete(eye_color)
