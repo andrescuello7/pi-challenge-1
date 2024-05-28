@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 from schemas.eye_color_schema import eye_color_schema
 
-
 class character_schema(BaseModel):
     id: int
     name: str

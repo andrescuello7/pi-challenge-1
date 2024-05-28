@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
 
-
 class user_schema(BaseModel):
     id: int
     photo: str

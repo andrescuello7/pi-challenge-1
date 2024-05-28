@@ -9,9 +9,11 @@ from services import user_service as controller
 
 router = APIRouter()
 
+
 @router.get("/")
 def main():
     return RedirectResponse(url="/docs/")
+
 
 @router.get('/api/users/getAll')
 def get_users(db: session = Depends(get_db)):
@@ -27,72 +29,72 @@ def get_users(db: session = Depends(get_db)):
             detail=f"Error: get all users, detail: {e}",
         )
 
+
 @router.post('/api/create/user')
 def create_user(
-    req: user_schema,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        req: user_schema,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Create new User
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Error: Not authorized'
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail='Error: Error user not authorized'
             )
 
         response = controller.create_new_user(db, req)
         return response
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error: create user, detail: {e}",
-        )
+            status_code=e.status_code,
+            detail=e.detail)
+
 
 @router.put('/api/update/user/{user_id}')
 def update_task(
-    req: user_schema,
-    user_id: int,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        req: user_schema,
+        user_id: int,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Update a task of admin
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized'
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail='Error user not authorized'
             )
 
         response = controller.update_user(db, user_id, req)
         return response
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error: update user, detail: {e}",
-        )
+            status_code=e.status_code,
+            detail=e.detail)
+
 
 @router.delete('/api/delete/user/{user_id}')
 def delete_character(
-    user_id: int,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        user_id: int,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Delete a user
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Not authorized'
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail='Error user not authorized'
             )
 
         user = controller.delete_user(db, user_id)
         return {"message": "User deleted successfully", "user": user}
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error: delete user, detail: {e}",
-        )
+            status_code=e.status_code,
+            detail=e.detail)

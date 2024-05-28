@@ -8,7 +8,6 @@ from db_config import session, get_db
 
 router = APIRouter()
 
-
 @router.get('/api/character/getAll', response_model=List[character_schema])
 def find_all_characters(db: session = Depends(get_db)):
     try:
@@ -39,14 +38,12 @@ def find_all_characters(db: session = Depends(get_db)):
     except Exception as e:
         return {'error': f'in show character {str(e)}'}
 
-
 @router.get('/api/character/color/getAll')
 def find_all_colors(db: session = Depends(get_db)):
     colors = db.query(EyeColorModel).all()
     if colors:
         return colors
     return {'error': 'in show characters'}
-
 
 @router.get('/api/character/get/{name}', response_model=character_schema)
 def find_character_by_name(name: str, db: session = Depends(get_db)):
@@ -71,7 +68,6 @@ def find_character_by_name(name: str, db: session = Depends(get_db)):
             }
     return {'error': 'get characters for name'}
 
-
 @router.get('/api/character/get/identify/{id}', response_model=character_schema)
 def find_character_by_id(id: int, db: session = Depends(get_db)):
     character = db.query(CharacterModel).filter_by(id=id).first()
@@ -95,7 +91,6 @@ def find_character_by_id(id: int, db: session = Depends(get_db)):
             }
     return {'error': 'get characters for ID'}
 
-
 @router.post('/api/character/add')
 def create_character(req: character_schema, db: session = Depends(get_db)):
     if req.eye_color:
@@ -115,7 +110,6 @@ def create_character(req: character_schema, db: session = Depends(get_db)):
         db.refresh(response)
         return response
     return {'error': 'get characters for ID'}
-
 
 @router.delete('/api/character/delete/{id}')
 def delete_character(id: int, db: session = Depends(get_db)):
