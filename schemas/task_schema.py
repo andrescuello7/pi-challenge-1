@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
-
 class User(BaseModel):
     id: int
     photo: str
@@ -10,12 +9,10 @@ class User(BaseModel):
     password: str
     role: Optional[int]
 
-
 class Comment(BaseModel):
     id: int
     task_id: int
     comment: str
-
 
 class task_schema(BaseModel):
     id: int

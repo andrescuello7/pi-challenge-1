@@ -2,7 +2,6 @@ from fastapi import HTTPException, status
 from models.user_model import UserModel
 from utils.bcrypt import hash_password
 
-
 def get_all(db):
     '''
     Query of database in the table UserModel to get all
@@ -15,7 +14,6 @@ def get_all(db):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="find all users in database"
         )
-
 
 def create_new_user(db, req):
     '''
@@ -37,7 +35,6 @@ def create_new_user(db, req):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="database or model user null"
         )
-
 
 def update_user(db, user_id, req):
     '''
@@ -61,7 +58,6 @@ def update_user(db, user_id, req):
             detail="udpate user, in get datos for update"
         )
 
-
 def delete_user(db, user_id):
     '''
     Query for DELETE a user in the table UserModel in the database
@@ -75,5 +71,5 @@ def delete_user(db, user_id):
     else:
         raise HTTPException(
             status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
-            detail="user_id null"
+            detail="invalid delete user_id"
         )

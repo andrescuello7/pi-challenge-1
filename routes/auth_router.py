@@ -7,7 +7,6 @@ from services import auth_service as controller
 
 router = APIRouter()
 
-
 @router.get('/api/auth/user')
 def get_auth(authorization: str = Header(...)):
     try:
@@ -18,7 +17,6 @@ def get_auth(authorization: str = Header(...)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"user not authenticated, details: {str(e)}"
         )
-
 
 @router.post('/api/auth/user')
 def create_auth(

@@ -8,7 +8,6 @@ from db_config import session, get_db
 
 router = APIRouter()
 
-
 @router.get('/api/keyphrase/{text}')
 def gpt_quetions(text: str):
     try:
@@ -21,7 +20,6 @@ def gpt_quetions(text: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Error: gpt quetions: {str(e)}",
         )
-
 
 @router.get('/api/keyphrase/character_id/{user_id}')
 def gpt_find_quetions(user_id: int, db: session = Depends(get_db)):
@@ -40,7 +38,6 @@ def gpt_find_quetions(user_id: int, db: session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Error: find gpt quetions: {str(e)}",
         )
-
 
 @router.post('/api/keyphrase')
 def gpt_post_quetions(req: keyphrase_schema, db: session = Depends(get_db)):
