@@ -9,9 +9,11 @@ from services import user_service as controller
 
 router = APIRouter()
 
+
 @router.get("/")
 def main():
     return RedirectResponse(url="/docs/")
+
 
 @router.get('/api/users/getAll')
 def get_users(db: session = Depends(get_db)):
@@ -27,18 +29,19 @@ def get_users(db: session = Depends(get_db)):
             detail=f"Error: get all users, detail: {e}",
         )
 
+
 @router.post('/api/create/user')
 def create_user(
-    req: user_schema,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        req: user_schema,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Create new User
     '''
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail='Error: Not authorized'
             )
 
@@ -50,12 +53,13 @@ def create_user(
             detail=f"Error: create user, detail: {e}",
         )
 
+
 @router.put('/api/update/user/{user_id}')
 def update_task(
-    req: user_schema,
-    user_id: int,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        req: user_schema,
+        user_id: int,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Update a task of admin
     '''
@@ -74,11 +78,12 @@ def update_task(
             detail=f"Error: update user, detail: {e}",
         )
 
+
 @router.delete('/api/delete/user/{user_id}')
 def delete_character(
-    user_id: int,
-    authorization: str = Header(...),
-    db: session = Depends(get_db)):
+        user_id: int,
+        authorization: str = Header(...),
+        db: session = Depends(get_db)):
     '''
     Delete a user
     '''
