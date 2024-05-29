@@ -1,9 +1,9 @@
-# FastApi - 4to Challenge
+# FastApi - Challenge
 
 Challenge of API with framework FastAPI -> Python!
-- URL [```Pi/Fastapi```](https://pi-challenge-fr.vercel.app)
+- URL [```ApiRest - Fastapi```](https://pi-challenge-fr.vercel.app)
 
-![Preview Image](https://github.com/andrescuello7/pi-challenge-1/assets/72234490/14dcf285-def5-4369-8c67-94d8ea0661d9)
+![Preview Image](https://github.com/andrescuello7/pi-challenge-1/assets/72234490/38cc0f14-2d9a-439c-93bd-62fc9ef99aac)
 
 ##
 #### Development:
