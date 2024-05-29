@@ -3,6 +3,8 @@ from jwt import decode
 from fastapi import HTTPException
 
 # Validation JWT in case expired [ UserModel or 401 ]
+
+
 def auth_token(authorization):
     if not authorization or not authorization.startswith('Bearer '):
         # JWT expired return error 401
