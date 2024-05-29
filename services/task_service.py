@@ -3,15 +3,17 @@ from models.task_model import TaskModel
 from models.user_model import UserModel
 from models.comment_model import CommentModel
 from schemas.task_schema import task_schema, User, Comment
+from enums.user_enum import USER_ROLE
 from sqlalchemy import or_, and_
 from datetime import datetime
 from typing import List
+
 
 def get_all_tasks(db) -> List[task_schema]:
     """
     Query of database in the table TasksModel to get all tasks.
     """
-    _list = []
+    tasks_lists = []
     response = db.query(TaskModel).all()
     if db and response:
         for task in response:
@@ -43,63 +45,73 @@ def get_all_tasks(db) -> List[task_schema]:
                     user=user_schema,
                     comments=comment_schemas,
                 )
-                _list.append(schema)
+                tasks_lists.append(schema)
 
-        return _list
+        return tasks_lists
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="find all tasks in database"
         )
 
-def get_tasks_by_id(db, user_id, status_task):
+
+def get_tasks_by_id(db, user_id, status_task, user):
     '''
     Query of database in the table TasksModel to get by id
     '''
-    _list = []
+    tasks_lists = []
     if db:
         query = db.query(TaskModel)
-        if user_id is not None and status_task is not None:
-            query = query.filter(and_(TaskModel.user_id == user_id, TaskModel.state == status_task))
-        elif user_id is not None:
-            query = query.filter(TaskModel.user_id == user_id)
-        elif status_task is not None:
-            query = query.filter(TaskModel.state == status_task)
-        
+        if user["role"] == USER_ROLE.USER:
+            if status_task is not None:
+                query = query.filter(
+                    and_(TaskModel.user_id == user["id"], TaskModel.state == status_task))
+            else:
+                query = query.filter(TaskModel.user_id == user["id"])
+        elif user["role"] == USER_ROLE.ADMIN:
+            if user_id is not None and status_task is not None:
+                query = query.filter(
+                    and_(TaskModel.user_id == user_id, TaskModel.state == status_task))
+            elif user_id is not None:
+                query = query.filter(TaskModel.user_id == user_id)
+            elif status_task is not None:
+                query = query.filter(TaskModel.state == status_task)
+            else:
+                query = query.filter(TaskModel)
+
         # Ejecutar la consulta y devolver los resultados
         response = query.all()
         if db and response:
             for task in response:
-                user = db.query(UserModel).filter_by(id=task.user_id).first()
-                if user:
-                    user_schema = User(
-                        id=user.id,
-                        photo=user.photo,
-                        user_name=user.user_name,
-                        full_name=user.full_name,
-                        password=user.password,
-                        role=user.role,
-                    )
-
-                    comments = db.query(CommentModel).filter_by(
-                        task_id=task.id).all()
-                    comment_schemas = [Comment(
-                        id=comment.id,
-                        task_id=comment.task_id,
-                        comment=comment.comment,
-                    ) for comment in comments]
-
+                user = db.query(UserModel).filter_by(
+                    id=task.user_id).first()
+                comments = db.query(CommentModel).filter_by(
+                    task_id=task.id).all()
+                if user and comments:
                     schema = task_schema(
                         id=task.id,
                         state=task.state,
                         title=task.title,
                         description=task.description,
                         user_id=task.user_id,
-                        user=user_schema,
-                        comments=comment_schemas,
+                        user=User(
+                            id=user.id,
+                            photo=user.photo,
+                            user_name=user.user_name,
+                            full_name=user.full_name,
+                            password=user.password,
+                            role=user.role,
+                        ),
+                        comments=[
+                            Comment(
+                                id=comment.id,
+                                task_id=comment.task_id,
+                                comment=comment.comment,
+                            ) for comment in comments
+                        ],
                     )
-                    _list.append(schema)
-        return _list
+                    tasks_lists.append(schema)
+        return tasks_lists
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -129,6 +141,7 @@ def create_new_task(db, req):
             detail="database or model task null"
         )
 
+
 def update_task(db, task_id, req):
     '''
     Query for UPDATE in the table TasksModel in the database
@@ -151,6 +164,7 @@ def update_task(db, task_id, req):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="update task, in get datos for update"
         )
+
 
 def patch_task(db, task_id, state):
     '''
@@ -175,6 +189,7 @@ def patch_task(db, task_id, state):
             detail="task_id null or error in udpate task"
         )
 
+
 def delete_tasks(db, task_id):
     '''
     Query for DELETE a task in the table TasksModel in the database
@@ -191,9 +206,10 @@ def delete_tasks(db, task_id):
             detail="task_id is null"
         )
 
+
 def add_comment_task(db, req):
     '''
-    Query for DELETE a task in the table TasksModel in the database
+    Query for Add coment a task in the table TasksModel in the database
     Identify for task_id
     '''
     if req and db:
