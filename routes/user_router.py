@@ -6,20 +6,14 @@ from schemas.user_schema import user_schema
 from db_config import session, get_db
 from utils.auth import auth_token
 from services import user_service as controller
-
 router = APIRouter()
-
 
 @router.get("/")
 def main():
     return RedirectResponse(url="/docs/")
 
-
 @router.get('/api/users/getAll')
-def get_users(db: session = Depends(get_db)):
-    '''
-    Get all Users
-    '''
+def get_users(db: session = Depends(get_db)): # type: ignore
     try:
         response = controller.get_all(db)
         return response
@@ -29,22 +23,17 @@ def get_users(db: session = Depends(get_db)):
             detail=f"Error: get all users, detail: {e}",
         )
 
-
 @router.post('/api/create/user')
 def create_user(
         req: user_schema,
         authorization: str = Header(...),
-        db: session = Depends(get_db)):
-    '''
-    Create new User
-    '''
+        db: session = Depends(get_db)): # type: ignore
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail='Error: Error user not authorized'
             )
-
         response = controller.create_new_user(db, req)
         return response
     except Exception as e:
@@ -52,16 +41,12 @@ def create_user(
             status_code=e.status_code,
             detail=e.detail)
 
-
 @router.put('/api/update/user/{user_id}')
 def update_task(
         req: user_schema,
         user_id: int,
         authorization: str = Header(...),
-        db: session = Depends(get_db)):
-    '''
-    Update a task of admin
-    '''
+        db: session = Depends(get_db)): # type: ignore
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
@@ -76,22 +61,17 @@ def update_task(
             status_code=e.status_code,
             detail=e.detail)
 
-
 @router.delete('/api/delete/user/{user_id}')
 def delete_character(
         user_id: int,
         authorization: str = Header(...),
-        db: session = Depends(get_db)):
-    '''
-    Delete a user
-    '''
+        db: session = Depends(get_db)): # type: ignore
     try:
         if auth_token(authorization)['role'] != user_role().ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail='Error user not authorized'
             )
-
         user = controller.delete_user(db, user_id)
         return {"message": "User deleted successfully", "user": user}
     except Exception as e:
