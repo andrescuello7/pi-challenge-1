@@ -4,7 +4,6 @@ from schemas.auth_schema import auth_schema
 from db_config import session, get_db
 from utils.auth import auth_token
 from services import auth_service as controller
-
 router = APIRouter()
 
 @router.get('/api/auth/user')
@@ -21,7 +20,7 @@ def get_auth(authorization: str = Header(...)):
 @router.post('/api/auth/user')
 def create_auth(
         req: auth_schema,
-        db: session = Depends(get_db)):
+        db: session = Depends(get_db)): # type: ignore
     try:
         response = controller.create_auth(db, req)
         return response

@@ -3,9 +3,7 @@ from models.user_model import UserModel
 from utils.bcrypt import hash_password
 
 def get_all(db):
-    '''
-    Query of database in the table UserModel to get all
-    '''
+    # Query of database in the table UserModel to get all
     if db:
         response = db.query(UserModel).all()
         return response
@@ -16,9 +14,7 @@ def get_all(db):
         )
 
 def create_new_user(db, req):
-    '''
-    Query for Add in the table UserModel database
-    '''
+    # Query for Add in the table UserModel database
     if db and req:
         response = UserModel(
             photo=req.photo,
@@ -37,10 +33,8 @@ def create_new_user(db, req):
         )
 
 def update_user(db, user_id, req):
-    '''
-    Query for UPDATE in the table UserModel in the database
-    Identify for user_id
-    '''
+    # Query for UPDATE in the table UserModel in the database
+    # Identify for user_id
     user = db.query(UserModel).filter_by(id=user_id).first()
     if user:
         user.photo = req.photo
@@ -59,10 +53,8 @@ def update_user(db, user_id, req):
         )
 
 def delete_user(db, user_id):
-    '''
-    Query for DELETE a user in the table UserModel in the database
-    Identify for user_id
-    '''
+    # Query for DELETE a user in the table UserModel in the database
+    # Identify for user_id
     if user_id:
         user = db.query(UserModel).filter_by(id=user_id).first()
         db.delete(user)
