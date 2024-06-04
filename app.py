@@ -19,11 +19,6 @@ app = FastAPI(
 app.include_router(router)
 openai.config_openAI.set_api_credentials(self='')
 
-# Documentation
-@router.get("/")
-def main():
-    return RedirectResponse(url="/docs/")
-
 # Cors
 app.add_middleware(
     CORSMiddleware,
