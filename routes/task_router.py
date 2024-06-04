@@ -6,7 +6,11 @@ from fastapi.params import Depends
 from enums.user_enum import USER_ROLE
 from schemas.task_schema import task_schema
 from schemas.comment_schema import comment_schema
-router = APIRouter()
+
+router = APIRouter(
+    tags=["Tasks"],
+    responses={404: {"description": "Not found"}},
+)
 
 @router.get('/api/tasks/getAll')
 def get_all_tasks(db: session = Depends(get_db)): # type: ignore
@@ -36,7 +40,7 @@ def get_tasks_by_id(
         return response
     except Exception as e:
         raise HTTPException(
-            status_code=e.status_code,
+            status_code=e["status_code"],
             detail=e.detail
         )
 
@@ -67,7 +71,7 @@ def update_task(
         db: session = Depends(get_db)): # type: ignore
     try:
         role = auth_token(authorization)['role']
-        if role != USER_ROLE.USER:
+        if role != USER_ROLE.ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail='Error user not authorized'

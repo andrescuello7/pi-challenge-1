@@ -86,7 +86,7 @@ def get_tasks_by_id(db, user_id, status_task, user):
                     task_id=task.id).all()
                 
                 # In this model add schemas of User and Comments
-                if user and comments:
+                if user:
                     schema = task_schema(
                         id=task.id,
                         state=task.state,
@@ -107,7 +107,7 @@ def get_tasks_by_id(db, user_id, status_task, user):
                                 task_id=comment.task_id,
                                 comment=comment.comment,
                             ) for comment in comments
-                        ],
+                        ] or [],
                     )
                     tasks_lists.append(schema)
         return tasks_lists

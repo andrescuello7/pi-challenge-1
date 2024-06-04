@@ -4,7 +4,11 @@ from schemas.auth_schema import auth_schema
 from db_config import session, get_db
 from utils.auth import auth_token
 from services import auth_service as controller
-router = APIRouter()
+
+router = APIRouter(
+    tags=["Authentication"],
+    responses={404: {"description": "Not found"}},
+)
 
 @router.get('/api/auth/user')
 def get_auth(authorization: str = Header(...)):

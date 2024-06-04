@@ -6,11 +6,11 @@ from schemas.user_schema import user_schema
 from db_config import session, get_db
 from utils.auth import auth_token
 from services import user_service as controller
-router = APIRouter()
 
-@router.get("/")
-def main():
-    return RedirectResponse(url="/docs/")
+router = APIRouter(
+    tags=["Users"],
+    responses={404: {"description": "Not found"}},
+)
 
 @router.get('/api/users/getAll')
 def get_users(db: session = Depends(get_db)): # type: ignore
