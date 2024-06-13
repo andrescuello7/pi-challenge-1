@@ -35,11 +35,13 @@ def get_all_tasks(db) -> List[task_schema]:
                         password=user.password,
                         role=user.role,
                     ),
-                    comments=[Comment(
-                        id=comment.id,
-                        task_id=comment.task_id,
-                        comment=comment.comment,
-                    ) for comment in comments],
+                    comments=[
+                        Comment(
+                            id=comment.id,
+                            task_id=comment.task_id,
+                            comment=comment.comment,
+                        ) for comment in comments
+                    ] or [],
                 )
                 tasks_lists.append(schema)
         return tasks_lists
@@ -60,7 +62,8 @@ def get_tasks_by_id(db, user_id, status_task, user):
         if user["role"] == USER_ROLE.USER:
             if status_task is not None:
                 query = query.filter(
-                    and_(TaskModel.user_id == user["id"], TaskModel.state == status_task))
+                    and_(TaskModel.user_id == user["id"], 
+                         TaskModel.state == status_task))
             else:
                 query = query.filter(TaskModel.user_id == user["id"])
         
@@ -69,13 +72,12 @@ def get_tasks_by_id(db, user_id, status_task, user):
         elif user["role"] == USER_ROLE.ADMIN:
             if user_id is not None and status_task is not None:
                 query = query.filter(
-                    and_(TaskModel.user_id == user_id, TaskModel.state == status_task))
+                    and_(TaskModel.user_id == user_id, 
+                         TaskModel.state == status_task))
             elif user_id is not None:
                 query = query.filter(TaskModel.user_id == user_id)
             elif status_task is not None:
                 query = query.filter(TaskModel.state == status_task)
-            else:
-                query = query.filter(TaskModel)
 
         response = query.all()
         if db and response:
